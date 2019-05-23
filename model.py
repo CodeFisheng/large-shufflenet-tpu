@@ -115,7 +115,7 @@ def metric_fn(labels, logits):
     top1_accuracy = tf.metrics.accuracy(labels, predictions)
     in_top5 = tf.to_float(tf.nn.in_top_k(predictions=logits, targets=labels, k=5))
     top5_accuracy = tf.metrics.mean(in_top5)
-    return {'top1_accuracy': accuracy, 'top5_accuracy': top5_accuracy}
+    return {'top1_accuracy': top1_accuracy, 'top5_accuracy': top5_accuracy}
 
 
 def get_learning_rate(global_step, params):

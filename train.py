@@ -96,6 +96,7 @@ config = tpu_config.RunConfig(
     ),
 )
 
+assert(PARAMS['use_bfloat16'] == True)
 
 estimator = tpu_estimator.TPUEstimator(
     model_fn=model_fn, model_dir=PARAMS['model_dir'],
