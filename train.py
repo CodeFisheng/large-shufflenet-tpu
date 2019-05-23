@@ -31,10 +31,10 @@ VAL_DATASET_SIZE = 49999
 NUM_STEPS_PER_EPOCH = TRAIN_DATASET_SIZE // BATCH_SIZE
 NUM_STEPS = NUM_EPOCHS * NUM_STEPS_PER_EPOCH  # 250200
 
-STEPS_PER_EVAL = 6 * 1251  # evaluate after every fourth epoch
+STEPS_PER_EVAL = 1251  # evaluate after every fourth epoch
 
 # number of steps to run on TPU before outfeeding metrics to the CPU
-ITERATIONS_PER_LOOP = 3 * 1251
+ITERATIONS_PER_LOOP = 1251
 
 # whether to do mixed precision training
 HALF_PRECISION = True
@@ -42,9 +42,9 @@ HALF_PRECISION = True
 NUM_WARM_UP_STEPS = 5 * NUM_STEPS_PER_EPOCH
 
 PARAMS = {
-    'train_file_pattern': 'gs://imagenetdata/train_shards/shard-*',
-    'val_file_pattern': 'gs://imagenetdata/val_shards/shard-*',
-    'model_dir': 'gs://imagenetdata/models/run00/',
+    'train_file_pattern': 'gs://hengshi-tpu/shufflenet_data_dir/train_shards/shard-*',
+    'val_file_pattern': 'gs://hengshi-tpu/shufflenet_data_dir/val_shards/shard-*',
+    'model_dir': 'gs://hengshi-tpu/sn_model_dir_bf16/',
 
     'num_classes': 1000,
     'depth_multiplier': '1.5',
