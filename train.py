@@ -19,9 +19,9 @@ python train.py
 # 1281144/1024 = 1251.12
 # so 1 epoch = 1251 steps
 
-TPU = ''
-TPU_ZONE = ''
-GCP_PROJECT = ''
+TPU = 'codefisheng'
+TPU_ZONE = 'us-central1-b'
+GCP_PROJECT = 'resnet-tpu-bf16'
 
 BATCH_SIZE = 1024
 VALIDATION_BATCH_SIZE = 1024  # some images will be excluded

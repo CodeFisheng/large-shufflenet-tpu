@@ -112,10 +112,10 @@ def metric_fn(labels, logits):
         logits: a float tensor with shape [batch_size, num_classes].
     """
     predictions = tf.argmax(logits, axis=1, output_type=tf.int32)
-    accuracy = tf.metrics.accuracy(labels, predictions)
+    top1_accuracy = tf.metrics.accuracy(labels, predictions)
     in_top5 = tf.to_float(tf.nn.in_top_k(predictions=logits, targets=labels, k=5))
     top5_accuracy = tf.metrics.mean(in_top5)
-    return {'accuracy': accuracy, 'top5_accuracy': top5_accuracy}
+    return {'top1_accuracy': accuracy, 'top5_accuracy': top5_accuracy}
 
 
 def get_learning_rate(global_step, params):
