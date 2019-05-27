@@ -140,7 +140,9 @@ def get_learning_rate(global_step, params):
 
     is_normal = global_step >= warm_up_steps
     learning_rate = tf.cond(is_normal, lambda: learning_rate, lambda: warm_up_learning_rate)
-    return scaler * learning_rate
+    is_extra = global_step >= tf.to_int64(250200)
+    learning_rate = tf.cond(is_extra, lambda: learning_rate, lambda: scaler * learning_rate)
+    return learning_rate
 
 
 def add_weight_decay(weight_decay):

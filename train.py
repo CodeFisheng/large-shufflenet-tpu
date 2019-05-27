@@ -30,6 +30,7 @@ TRAIN_DATASET_SIZE = 1281144
 VAL_DATASET_SIZE = 49999
 NUM_STEPS_PER_EPOCH = TRAIN_DATASET_SIZE // BATCH_SIZE
 NUM_STEPS = NUM_EPOCHS * NUM_STEPS_PER_EPOCH  # 250200
+EXTRA_STEPS = 12510
 
 STEPS_PER_EVAL = 1251  # evaluate after every fourth epoch
 
@@ -37,14 +38,14 @@ STEPS_PER_EVAL = 1251  # evaluate after every fourth epoch
 ITERATIONS_PER_LOOP = 1251
 
 # whether to do mixed precision training
-HALF_PRECISION = True
+HALF_PRECISION = False
 
 NUM_WARM_UP_STEPS = 5 * NUM_STEPS_PER_EPOCH
 
 PARAMS = {
     'train_file_pattern': 'gs://hengshi-tpu/shufflenet_data_dir/train_shards/shard-*',
     'val_file_pattern': 'gs://hengshi-tpu/shufflenet_data_dir/val_shards/shard-*',
-    'model_dir': 'gs://hengshi-tpu/sn_model_dir_bf16/',
+    'model_dir': 'gs://hengshi-tpu/sn_model_dir_fp32/',
 
     'num_classes': 1000,
     'depth_multiplier': '1.5',
@@ -140,4 +141,4 @@ def train_and_eval(input_fn, end_step):
         tf.logging.info('Eval results at step %d: %s', next_checkpoint, eval_results)
 
 
-train_and_eval(train_input_fn, NUM_EPOCHS * NUM_STEPS_PER_EPOCH)
+train_and_eval(train_input_fn, NUM_EPOCHS * NUM_STEPS_PER_EPOCH + EXTRA_STEPS)
