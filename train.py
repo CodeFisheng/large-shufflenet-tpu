@@ -5,7 +5,7 @@ from input_pipeline import Pipeline
 from tensorflow.contrib.tpu.python.tpu import tpu_config
 from tensorflow.contrib.tpu.python.tpu import tpu_estimator
 
-tf.logging.set_verbosity('INFO')
+tf.logging.set_verbosity(tf.logging.DEBUG)
 
 
 """
@@ -25,9 +25,9 @@ GCP_PROJECT = 'resnet-tpu-bf16'
 
 BATCH_SIZE = 1024
 VALIDATION_BATCH_SIZE = 1024  # some images will be excluded
-NUM_EPOCHS = 200
+NUM_EPOCHS =200
 TRAIN_DATASET_SIZE = 1281144
-VAL_DATASET_SIZE = 49999
+VAL_DATASET_SIZE = 1281144 #49999
 NUM_STEPS_PER_EPOCH = TRAIN_DATASET_SIZE // BATCH_SIZE
 NUM_STEPS = NUM_EPOCHS * NUM_STEPS_PER_EPOCH  # 250200
 EXTRA_STEPS = 12510
@@ -45,7 +45,7 @@ NUM_WARM_UP_STEPS = 5 * NUM_STEPS_PER_EPOCH
 PARAMS = {
     'train_file_pattern': 'gs://hengshi-tpu/shufflenet_data_dir/train_shards/shard-*',
     'val_file_pattern': 'gs://hengshi-tpu/shufflenet_data_dir/val_shards/shard-*',
-    'model_dir': 'gs://hengshi-tpu/sn_model_dir_fp32/',
+    'model_dir': 'gs://hengshi-tpu/model_tmp_dir',#'gs://hengshi-tpu/sn_model_dir_large_bf16/',
 
     'num_classes': 1000,
     'depth_multiplier': '1.5',
@@ -97,8 +97,6 @@ config = tpu_config.RunConfig(
     ),
 )
 
-assert(PARAMS['use_bfloat16'] == True)
-
 estimator = tpu_estimator.TPUEstimator(
     model_fn=model_fn, model_dir=PARAMS['model_dir'],
     params=PARAMS, config=config,
@@ -134,11 +132,12 @@ def train_and_eval(input_fn, end_step):
 
         tf.logging.info('Starting to evaluate.')
         eval_results = estimator.evaluate(
-            input_fn=eval_input_fn,
+            # TODO eval_input_fn to input_fn
+            input_fn=input_fn,
             steps=VAL_DATASET_SIZE // VALIDATION_BATCH_SIZE,
             hooks=[RestoreMovingAverageHook(PARAMS['model_dir'])]
         )
         tf.logging.info('Eval results at step %d: %s', next_checkpoint, eval_results)
 
 
-train_and_eval(train_input_fn, NUM_EPOCHS * NUM_STEPS_PER_EPOCH + EXTRA_STEPS)
+train_and_eval(train_input_fn, 1)#NUM_EPOCHS * NUM_STEPS_PER_EPOCH + EXTRA_STEPS)

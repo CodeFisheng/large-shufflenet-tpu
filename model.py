@@ -3,8 +3,9 @@ from tensorflow.contrib import summary
 from tensorflow.contrib.tpu.python.tpu import bfloat16
 from tensorflow.contrib.tpu.python.tpu import tpu_optimizer
 
-from small_network import shufflenet
-# from large_network import large_shufflenet
+# TODO
+#from small_network import shufflenet
+from large_network import large_shufflenet as shufflenet
 
 
 MOMENTUM = 0.9
@@ -19,8 +20,9 @@ def model_fn(features, labels, mode, params):
     assert mode != tf.estimator.ModeKeys.PREDICT
 
     network = lambda images, is_training: shufflenet(
-        images, is_training, num_classes=params['num_classes'],
-        depth_multiplier=params['depth_multiplier']
+        images, is_training, num_classes=params['num_classes']#,
+        # TODO
+        #,depth_multiplier=params['depth_multiplier']
     )
 
     # tensor `features` is a half precision tensor with shape [height, width, 3, batch_size],
